@@ -1,0 +1,693 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Lab 01 - Trabalhando com Machine Learning na Prática no Azure ML</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="88c8bd25-6fbe-41ee-92a1-7aa044d96992" class="page sans"><header><h1 class="page-title">Lab 01 - <strong><strong>Trabalhando com Machine Learning na Prática no Azure ML</strong></strong></h1><p class="page-description"></p></header><div class="page-body"><p id="e3d80da3-124c-4705-8a85-c92d4e9e6804" class="">
+</p><figure id="fe7fb077-fd4e-4f94-9498-0d0ef819c14d" class="image"><a href="Lab%2001%20-%20Trabalhando%20com%20Machine%20Learning%20na%20Pra%CC%81t%2088c8bd256fbe41ee92a17aa044d96992/Untitled.png"><img style="width:1076px" src="Lab%2001%20-%20Trabalhando%20com%20Machine%20Learning%20na%20Pra%CC%81t%2088c8bd256fbe41ee92a17aa044d96992/Untitled.png"/></a></figure><p id="96374287-7981-4a8b-9fcb-61cd349759f6" class="">
+</p><p id="ec4191e1-f916-415d-a4e2-d25e83d67f25" class="">Este repositório abrange a atividade desenvolvida durante o curso <strong>Microsoft Azure AI Fundamentals</strong>. Especificamente, o foco foi em trabalhar com Machine Learning na prática utilizando o Azure ML (Azure Machine Learning). O conteúdo deste repositório documenta os aprendizados, projetos e experimentos realizados ao longo do curso, fornecendo insights e exemplos práticos sobre o uso de Machine Learning no ambiente do Azure ML.</p><p id="f9a12d8d-ce60-4e15-915a-a338b5c2bbaa" class="">
+</p><nav id="baa6df5a-7eb8-4b7c-9f33-dbf2f7f333ab" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d72728f6-ae92-4dfb-8bcf-b8ea227b8da9">Introdução: </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3ebe0724-3921-4e47-959e-361c0f060732">Laboratório: </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7e3bdaf2-6797-420e-9e6e-d1523dc63ea3">Desenvolvimento: </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4889aab0-d770-4847-9dca-6523ef90a6b7">Resultados:</a></div></nav><p id="528bac6a-fd50-4267-8fc0-6c82870bfca9" class="">
+</p><h2 id="d72728f6-ae92-4dfb-8bcf-b8ea227b8da9" class="">Introdução: </h2><p id="614347d8-af33-46a6-9c5f-e14320f6fb24" class="">
+</p><p id="bc3ac9a6-4783-4b17-9c47-f646cd74386b" class="">O experimento foi focado no treinamento de modelos de machine learning utilizando os algoritmos LightGBM, RandomForest e VotingEnsemble, com a métrica de avaliação sendo o normalized_root_mean_squared_error. Cada algoritmo tem características distintas que contribuem para a eficácia do modelo final:</p><ol type="1" id="026f289f-531b-40d0-8212-672e10e1f37e" class="numbered-list" start="1"><li><strong>RandomForest</strong>: Baseado em árvores de decisão, o RandomForest cria múltiplas árvores durante o treinamento e combina suas previsões para uma decisão final. Cada árvore é treinada com uma amostra aleatória dos dados e usa uma combinação aleatória de características em cada divisão, reduzindo o overfitting e melhorando a generalização do modelo.</li></ol><ol type="1" id="c107b597-1288-4c86-9ea4-ea18bd816b1f" class="numbered-list" start="2"><li><strong>LightGBM</strong>: Esta implementação eficiente e escalável do Gradient Boosting Decision Tree (GBDT) se destaca pela velocidade e eficácia. O LightGBM utiliza técnicas como Gradient-based One-Side Sampling (GOSS) e Exclusive Feature Bundling (EFB) para melhorar o processo de treinamento, resultando em modelos mais rápidos e precisos.</li></ol><ol type="1" id="99d27014-d84c-4df9-a75d-d8f7e07254a3" class="numbered-list" start="3"><li><strong>VotingEnsemble</strong>: Um tipo de ensemble learning, o VotingEnsemble combina as previsões de vários modelos individuais para produzir uma previsão final mais robusta. Neste caso, os modelos RandomForest e LightGBM podem ter sido combinados usando uma técnica de votação, como a votação por maioria, para produzir uma previsão final mais precisa do que qualquer modelo individualmente.</li></ol><p id="b557bd13-d429-4dc2-8c97-3a8617a6dfe5" class="">
+</p><h2 id="3ebe0724-3921-4e47-959e-361c0f060732" class="">Laboratório: </h2><p id="d173517e-215b-43a5-accd-773435f85cc0" class="">
+</p><p id="df0ca5d2-aa3b-4893-9389-e97b7ae03c12" class="">O relatório a seguir foi elaborado com base no exercício &quot;Explore o Machine Learning Automatizado no Azure Machine Learning&quot;. Neste exercício, utilizamos o recurso de aprendizado de máquina automatizado no Azure Machine Learning para treinar e avaliar um modelo de aprendizado de máquina.</p><p id="d278fa14-8a35-4f57-9ceb-28d65781e1c8" class="">
+</p><figure id="bc3274eb-4a69-424a-8b78-5c3f0873f48f"><a href="https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Labs/01-machine-learning.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">mslearn-ai-fundamentals</div><div class="bookmark-description">In this exercise, you’ll use the automated machine learning feature in Azure Machine Learning to train and evaluate a machine learning model. You’ll then deploy and test the trained model.</div></div><div class="bookmark-href">https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Labs/01-machine-learning.html</div></div></a></figure><h2 id="7e3bdaf2-6797-420e-9e6e-d1523dc63ea3" class="">Desenvolvimento: </h2><p id="380a1347-3d39-49d3-9e24-ed36bbdf8bf2" class="">
+</p><p id="540d9231-4809-40d2-8f1b-1da78c6401ef" class="">Para realizar o experimento, siga todos os passos a seguir:</p><p id="6e028064-141c-447f-9073-2257d6768bb6" class=""> </p><p id="071d9075-8b51-4375-afc2-559213ba465b" class="">No Azure Machine Learning Studio , veja a página Automated ML (em Authoring ).</p><p id="c470ee77-5fd1-49d3-8ab9-949f55fd8cfe" class="">Crie um novo trabalho de ML automatizado com as seguintes configurações, usando Next conforme necessário para avançar pela interface do usuário:</p><p id="96b05a65-8c1d-48ca-b990-fb032c362982" class="">
+</p><p id="5f94e73b-330a-4331-8095-ed469ad0d778" class="">Configurações básicas :</p><p id="b96a6583-dd44-4a5f-ac11-e1e4cb6f48b2" class="">Nome do trabalho : mslearn-bike-automl<br/>Novo nome do experimento : mslearn-bike-rental<br/>Descrição : Aprendizado de máquina automatizado para previsão de aluguel de bicicletas<br/>Marcadores : nenhum<br/><br/></p><p id="f0bd9dc3-f85b-444f-a4e2-108e732a7aa0" class="">Tipo de tarefa e dados :</p><p id="5a0b6b07-eb2d-4d9a-9d98-7ff14b9f692e" class="">Selecione o tipo de tarefa : Regressão<br/>Selecionar conjunto de dados : crie um novo conjunto de dados com as seguintes configurações:<br/>Tipo de dados :<br/>Nome : aluguel de bicicletas<br/>Descrição : dados históricos de aluguel de bicicletas<br/>Tipo : Tabular<br/>Fonte de dados : Selecione Dos arquivos da web<br/><br/></p><p id="8edd4426-2430-47ab-92f8-5f0617c40678" class="">URL da Web :<br/>URL da Web :<br/><a href="https://aka.ms/bike-rentals">https://aka.ms/bike-rentals</a><br/>Ignorar validação de dados : não selecionar<br/><br/></p><p id="fbf3c000-869e-49c1-b4a9-fb783766c947" class="">Configurações :</p><p id="dfc45613-c7bb-444a-858f-24422ad2e408" class="">Formato de arquivo : Delimitado<br/>Delimitador : Vírgula<br/>Codificação : UTF-8<br/>Cabeçalhos de coluna : apenas o primeiro arquivo possui cabeçalhos<br/>Pular linhas : Nenhum<br/>O conjunto de dados contém dados multilinhas : não selecione<br/><br/></p><p id="cc988b19-e172-40ca-9abf-9a75e17c2892" class="">Esquema :</p><p id="08fdef94-a642-4159-baa5-16d1f435ad68" class="">Incluir todas as colunas exceto Caminho<br/>Revise os tipos detectados automaticamente<br/>Selecione Criar . Após a criação do conjunto de dados, selecione o conjunto de dados de aluguel de bicicletas para continuar a enviar o trabalho de ML automatizado.<br/></p><p id="7c645ee7-fdf3-4f6a-9a36-5da64a1fe187" class="">
+</p><p id="e255ead9-4503-41ab-8e56-b9df04ce92e9" class="">Configurações de tarefa :</p><p id="783f482c-1e45-43b4-834d-13272acdb8e1" class="">Tipo de tarefa : Regressão<br/>Conjunto de dados : aluguel de bicicletas<br/>Coluna de destino : Aluguéis (inteiro)<br/><br/></p><p id="03d536cc-2fc5-4127-85da-67c9797d9fca" class="">Configurações adicionais : (selecione a engrenagem)<br/>Métrica primária : raiz do erro quadrático médio normalizado<br/>Explique o melhor modelo : Não selecionado<br/>Usar todos os modelos suportados : Desmarcado . Você restringirá o trabalho para tentar apenas alguns algoritmos específicos.<br/><br/></p><p id="67ec006c-68db-49e4-8949-ba932ea602bd" class="">Modelos permitidos : Selecione apenas RandomForest e LightGBM — normalmente você gostaria de tentar o máximo possível, mas cada modelo adicionado aumenta o tempo necessário para executar o trabalho.</p><p id="8852285d-1bc0-4ddf-bb5f-98d8f2382eb6" class="">
+</p><p id="bc81b09f-1b6e-4fb7-84ad-e996b19d3f5d" class="">Limites : expanda esta seção<br/>Máximo de testes : 3<br/>Máximo de testes simultâneos : 3<br/>Máximo de nós : 3<br/>Limite de pontuação da métrica : 0,085 ( para que, se um modelo atingir uma pontuação da métrica de erro quadrático médio normalizado de 0,085 ou menos, o trabalho termina. )<br/>Tempo limite : 15<br/>Tempo limite de iteração : 15<br/>Habilitar rescisão antecipada : selecionado<br/></p><p id="ef0ebec1-d243-4686-8c32-49268a151a0e" class=""><br/>Validação e teste :<br/>Tipo de validação : divisão de validação de treinamento<br/>Porcentagem de dados de validação : 10<br/>Conjunto de dados de teste : Nenhum<br/></p><p id="cff79e52-de65-4cbd-b68b-3d42e6fb6bf1" class="">
+</p><p id="f72b1909-5aff-480d-b58e-f051cfae3e13" class="">Calcular :</p><p id="686c745c-fbaa-491d-ab20-17c63d65f26a" class="">Selecione o tipo de computação : sem servidor<br/>Tipo de máquina virtual : CPU<br/>Camada de máquina virtual : Dedicada<br/>Tamanho da máquina virtual : Standard_DS3_V2*<br/>Número de instâncias : 1<br/></p><p id="04325bc0-2cd5-4870-a1f5-e5096f29a455" class="">
+</p><p id="5399feca-0dcb-418e-a468-35996c269dae" class="">Ao final das configurações é necessário que as informações sejam:  </p><figure id="ef5057af-607f-43bf-8613-f5101cbfc713" class="image"><a href="Lab%2001%20-%20Trabalhando%20com%20Machine%20Learning%20na%20Pra%CC%81t%2088c8bd256fbe41ee92a17aa044d96992/Untitled%201.png"><img style="width:1208px" src="Lab%2001%20-%20Trabalhando%20com%20Machine%20Learning%20na%20Pra%CC%81t%2088c8bd256fbe41ee92a17aa044d96992/Untitled%201.png"/></a></figure><p id="bf9e7667-b968-4109-a159-044b50ea23bc" class="">
+</p><h2 id="4889aab0-d770-4847-9dca-6523ef90a6b7" class="">Resultados:</h2><p id="bfcc153b-0b78-4ccd-be6d-97d00134e12a" class="">
+</p><p id="310994d4-8e7f-4a57-adff-24e59b199df7" class="">Diversas configurações foram ajustadas para otimizar o treinamento dos modelos, e o experimento foi conduzido em um ambiente de computação com máquina virtual Standard_DS3_v2 e prioridade dedicada.</p><p id="66b8cee0-75e7-457b-9848-794f41243757" class=""><strong>Algoritmos Utilizados:</strong><br/>Foram utilizados os algoritmos LightGBM, RandomForest e VotingEnsemble. O VotingEnsemble combina os resultados dos modelos individuais para produzir uma previsão final.<br/></p><p id="639f7e88-725c-4f53-8b48-6887b69e0536" class=""><strong>Métrica de Desempenho:</strong><br/>A métrica normalized_root_mean_squared_error foi utilizada para avaliar o desempenho dos modelos. O valor de 0.08922 indica um desempenho médio dos modelos treinados em relação aos valores reais.<br/></p><p id="2c4c4f60-578f-4285-a13e-b945f528b7e4" class=""><strong>Configurações de Treinamento:</strong><br/>Foram ajustadas diversas configurações para otimizar o treinamento dos modelos, incluindo o número de iterações (3), o tipo de treinamento (TrainFull), a função de aquisição (EI) e a quantidade de validação cruzada (0).<br/></p><p id="018e29eb-3af1-4c58-a078-6e592af1578b" class=""><strong>Datasets Utilizados:</strong><br/>O conjunto de dados de treinamento utilizado está identificado como MLTable e está localizado em uma URI específica.<br/></p><p id="419c6ae7-936d-4956-b860-293f6769d630" class=""><strong>Ambiente de Computação:</strong><br/>O experimento foi conduzido em um ambiente de computação com máquina virtual Standard_DS3_v2 e prioridade dedicada.<br/></p><p id="dfe7f0dc-4242-4e06-999b-c65a00af9ea6" class=""><strong>Conclusão:</strong><br/>O experimento foi bem-sucedido, resultando em modelos de machine learning com bom desempenho. A combinação dos algoritmos e as configurações ajustadas contribuíram para a precisão das previsões finais.<br/></p><p id="76776bd3-27d6-4434-a453-af9c6c8632b1" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
